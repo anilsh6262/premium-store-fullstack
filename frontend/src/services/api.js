@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const API = axios.create({
-  baseURL: "http://localhost:5000/", // ✅ REMOVE /api
+  baseURL: "https://premium-store-backend.onrender.com", // ✅ REMOVE /api
 });
