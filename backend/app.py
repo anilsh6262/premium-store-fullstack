@@ -68,20 +68,24 @@ app.register_blueprint(
 app.register_blueprint(
     admin_bp,
     url_prefix="/api/admin"
+
+    
 )
+
+@app.route("/")
+def home():
+    return {"status": "Backend Running"}
+
 @app.route("/uploads/products/<filename>")
 def uploaded_file(filename):
     return send_from_directory(
         "uploads/products",
         filename
     )
+
+
 # ---------------------------
-# RUN SERVER
-# ---------------------------
-# ---------------------------
-# RUN SERVER
-# ---------------------------
-import os
+
 
 # ---------------------------
 # RUN SERVER
