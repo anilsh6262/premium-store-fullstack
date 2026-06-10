@@ -51,9 +51,11 @@ console.log(
       }
 
     } catch (err) {
-      console.log("Login error:", err.response?.data || err.message);
-      alert("Login Failed");
-    }
+  console.log("STATUS:", err.response?.status);
+  console.log("DATA:", err.response?.data);
+  console.log("ERROR:", err);
+  alert("Login Failed");
+}
   };
 
   return (
