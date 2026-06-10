@@ -87,6 +87,9 @@ import os
 # RUN SERVER
 # ---------------------------
 import os
+@app.route("/")
+def home():
+    return {"message": "Backend Running"}
 
 if __name__ == "__main__":
     socketio.run(
