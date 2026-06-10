@@ -1,0 +1,38 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: linear-gradient(90deg, #1b181f, #2575fc);
+  color: white;
+}
+
+/* LOGO */
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+/* LINKS */
+.nav-links a {
+  margin-left: 15px;
+  text-decoration: none;
+  color: white;   /* FIXED */
+  font-weight: 500;
+}
+
+/* BUTTON STYLE */
+.btn {
+  padding: 6px 12px;
+  background: white;
+  color: black;
+  border-radius: 6px;
+}
+
+/* OUTLINE BUTTON */
+.btn.outline {
+  background: transparent;
+  border: 1px solid white;
+  color: white;   /* FIXED */
+}
