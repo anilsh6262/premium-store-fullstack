@@ -7,6 +7,10 @@ from flask import send_from_directory
 
 from config import Config
 
+
+print("MONGO_URI =", Config.MONGO_URI)
+print("JWT_SECRET_KEY =", Config.JWT_SECRET_KEY)
+
 # ---------------------------
 # INIT APP
 # ---------------------------
@@ -72,9 +76,7 @@ app.register_blueprint(
     
 )
 
-@app.route("/")
-def home():
-    return {"status": "Backend Running"}
+
 
 @app.route("/uploads/products/<filename>")
 def uploaded_file(filename):
