@@ -97,6 +97,15 @@ import os
 def home():
     return {"message": "Backend Running"}
 
+@app.route("/test-db")
+def test_db():
+    try:
+        client.admin.command("ping")
+        return {"status": "MongoDB Connected"}
+    except Exception as e:
+        return {"status": "Failed", "error": str(e)}
+
+
 if __name__ == "__main__":
     socketio.run(
         app,

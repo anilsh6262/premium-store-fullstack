@@ -1,4 +1,3 @@
-
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
@@ -10,78 +9,101 @@ auth_bp = Blueprint("auth_bp", __name__)
 # ----------------------------------
 @auth_bp.route("/register", methods=["POST"])
 def register():
+    try:
+        data = request.json or {}
+        db = current_app.db
 
-    data = request.json
-    db = current_app.db
+        email = data.get("email")
+        password = data.get("password")
+        name = data.get("name")
 
-    email = data.get("email")
+        if not email or not password or not name:
+            return jsonify({"message": "All fields are required"}), 400
 
-    existing = db.users.find_one({"email": email})
+        existing = db.users.find_one({"email": email})
 
-    if existing:
-        return jsonify({"message": "Email already exists"}), 400
+        if existing:
+            return jsonify({"message": "Email already exists"}), 400
 
-    db.users.insert_one({
-        "name": data.get("name"),
-        "email": email,
-        "password": generate_password_hash(data.get("password")),
-        "role": "user"
-    })
+        db.users.insert_one({
+            "name": name,
+            "email": email,
+            "password": generate_password_hash(password),
+            "role": "user"
+        })
 
-    return jsonify({"message": "Registration successful"}), 201
+        return jsonify({"message": "Registration successful"}), 201
+
+    except Exception as e:
+        print("REGISTER ERROR:", e)
+        return jsonify({"error": str(e)}), 500
 
 
 # ----------------------------------
-# LOGIN
+# LOGIN (FIXED)
 # ----------------------------------
 @auth_bp.route("/login", methods=["POST"])
 def login():
+    try:
+        data = request.json or {}
+        db = current_app.db
 
-    data = request.json
-    db = current_app.db
+        email = data.get("email")
+        password = data.get("password")
 
-    user = db.users.find_one({"email": data.get("email")})
+        if not email or not password:
+            return jsonify({"message": "Email and password required"}), 400
 
-    if not user:
-        return jsonify({"message": "User not found"}), 404
+        user = db.users.find_one({"email": email})
 
-    if not check_password_hash(user["password"], data.get("password")):
-        return jsonify({"message": "Invalid password"}), 401
+        if not user:
+            return jsonify({"message": "User not found"}), 404
 
-    token = create_access_token(
-    identity=str(user["_id"]),
-    additional_claims={
-        "role": user["role"],
-        "email": user["email"]
-    }
-)
+        if not check_password_hash(user["password"], password):
+            return jsonify({"message": "Invalid password"}), 401
 
-    return jsonify({
-        "token": token,
-        "user": {
-            "id": str(user["_id"]),
-            "name": user["name"],
-            "email": user["email"],
-            "role": user["role"]
-        }
-    }), 200
+        token = create_access_token(
+            identity=str(user["_id"]),
+            additional_claims={
+                "role": user.get("role", "user"),
+                "email": user.get("email")
+            }
+        )
+
+        return jsonify({
+            "token": token,
+            "user": {
+                "id": str(user["_id"]),
+                "name": user.get("name"),
+                "email": user.get("email"),
+                "role": user.get("role", "user")
+            }
+        }), 200
+
+    except Exception as e:
+        print("LOGIN ERROR:", e)
+        return jsonify({"error": str(e)}), 500
 
 
 # ----------------------------------
-# 👇 ADD THIS (ADMIN CREATOR)
+# ADMIN CREATOR
 # ----------------------------------
 @auth_bp.route("/create-admin", methods=["GET"])
 def create_admin():
-    db = current_app.db
+    try:
+        db = current_app.db
 
-    # remove old admin (optional)
-    db.users.delete_one({"email": "admin@gmail.com"})
+        db.users.delete_one({"email": "admin@gmail.com"})
 
-    db.users.insert_one({
-        "name": "Admin",
-        "email": "admin@gmail.com",
-        "password": generate_password_hash("Admin@1234"),
-        "role": "admin"
-    })
+        db.users.insert_one({
+            "name": "Admin",
+            "email": "admin@gmail.com",
+            "password": generate_password_hash("Admin@1234"),
+            "role": "admin"
+        })
 
-    return jsonify({"message": "Admin created successfully"}), 201
+        return jsonify({"message": "Admin created successfully"}), 201
+
+    except Exception as e:
+        print("ADMIN ERROR:", e)
+        return jsonify({"error": str(e)}), 500
