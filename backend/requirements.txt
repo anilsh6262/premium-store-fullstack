@@ -2,8 +2,9 @@ Flask
 Flask-Cors
 Flask-JWT-Extended
 Flask-SocketIO
-pymongo
+pymongo>=4.6.0
 python-dotenv
 Werkzeug
 gunicorn
 eventlet
+dnspython>=2.6.1
