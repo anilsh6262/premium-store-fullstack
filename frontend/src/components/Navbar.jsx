@@ -10,20 +10,37 @@ export default function Navbar() {
       <h2 className="logo">🛍️ Premium Store</h2>
 
       <div className="nav-links">
+        {/* Always visible */}
         <Link to="/">Home</Link>
 
-        {user ? (
+        {/* NOT LOGGED IN */}
+        {!user && (
+          <>
+            <Link to="/register">Register</Link>
+            <Link to="/login">Login</Link>
+            <Link to="/admin-login">Admin Login</Link>
+          </>
+        )}
+
+        {/* USER LOGGED IN */}
+        {user && user.role === "user" && (
           <>
             <Link to="/products">Products</Link>
-            <button className="logout-btn" onClick={logout}>
+            <Link to="/profile">User Info</Link>
+            <button onClick={logout} className="logout-btn">
               Logout
             </button>
           </>
-        ) : (
+        )}
+
+        {/* ADMIN LOGGED IN */}
+        {user && user.role === "admin" && (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-            <Link to="/login">Admin Login</Link>
+            <Link to="/admin">Admin Panel</Link>
+            <Link to="/admin-profile">Admin Info</Link>
+            <button onClick={logout} className="logout-btn">
+              Logout
+            </button>
           </>
         )}
       </div>
