@@ -53,8 +53,8 @@ export default function Products() {
               {item.images &&
               item.images.length > 0 ? (
                 <img
-                  src={`http://localhost:5000/${item.images[0]}`}
-                  alt={item.name}
+                 {`https://premium-store-fullstack-1.onrender.com/uploads/products/${product.image}`}
+  alt={product.name}
                 />
               ) : (
                 <img
