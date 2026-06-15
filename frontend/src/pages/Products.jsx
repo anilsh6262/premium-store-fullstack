@@ -53,8 +53,8 @@ export default function Products() {
               {item.images &&
               item.images.length > 0 ? (
                 <img
-                 {`https://premium-store-fullstack-1.onrender.com/uploads/products/${product.image}`}
-  alt={product.name}
+                  src={`https://premium-store-fullstack-1.onrender.com/uploads/products/${item.images[0]}`}
+                  alt={item.name}
                 />
               ) : (
                 <img
@@ -68,14 +68,10 @@ export default function Products() {
               <p>{item.description}</p>
 
               <p>
-                <strong>
-                  ₹ {item.price}
-                </strong>
+                <strong>₹ {item.price}</strong>
               </p>
 
-              <button>
-                Add to Cart
-              </button>
+              <button>Add to Cart</button>
             </div>
           ))}
         </div>
