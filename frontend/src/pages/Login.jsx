@@ -47,7 +47,7 @@ console.log(
       if (user.role === "admin") {
         window.location.href = "/admin";
       } else {
-        navigate("/");
+        navigate("/products");
       }
 
     } catch (err) {
