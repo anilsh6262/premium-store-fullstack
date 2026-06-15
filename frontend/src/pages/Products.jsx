@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { API } from "../services/api";
 import "./products.css";
+import { BASE_URL } from "../config";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -16,17 +17,9 @@ export default function Products() {
 
       console.log("PRODUCTS:", res.data);
 
-      res.data.forEach((item) => {
-        console.log("PRODUCT:", item);
-        console.log("IMAGE:", item.images);
-      });
-
       setProducts(res.data);
     } catch (err) {
-      console.log(
-        "PRODUCT ERROR:",
-        err.response?.data || err.message
-      );
+      console.log("PRODUCT ERROR:", err.response?.data || err.message);
     } finally {
       setLoading(false);
     }
@@ -50,32 +43,24 @@ export default function Products() {
       ) : (
         <div className="products-grid">
           {products.map((item) => (
-            <div
-              className="product-card"
-              key={item._id}
-            >
-              {item.images && item.images.length > 0 ? (
-                <img
-                  src={`https://premium-store-fullstack-1.onrender.com/${item.images[0]}`}
-                  alt={item.name}
-                  onError={(e) => {
-                    console.log(
-                      "IMAGE FAILED:",
-                      item.images[0]
-                    );
-                    e.target.src =
-                      "https://via.placeholder.com/300x200?text=Image+Not+Found";
-                  }}
-                />
-              ) : (
-                <img
-                  src="https://via.placeholder.com/300x200?text=No+Image"
-                  alt="No Image"
-                />
-              )}
+            <div className="product-card" key={item._id}>
+              
+              {/* IMAGE FIX (FINAL CLEAN VERSION) */}
+              <img
+                src={
+                  item.images && item.images.length > 0
+                    ? `${BASE_URL}/${item.images[0]}`
+                    : "https://via.placeholder.com/300x200?text=No+Image"
+                }
+                alt={item.name}
+                onError={(e) => {
+                  console.log("IMAGE FAILED:", item.images?.[0]);
+                  e.target.src =
+                    "https://via.placeholder.com/300x200?text=Image+Not+Found";
+                }}
+              />
 
               <h3>{item.name}</h3>
-
               <p>{item.description}</p>
 
               <p>

@@ -104,7 +104,12 @@ def test_db():
         return {"status": "MongoDB Connected"}
     except Exception as e:
         return {"status": "Failed", "error": str(e)}
+from flask import send_from_directory
+import os
 
+@app.route("/uploads/products/<path:filename>")
+def uploaded_file(filename):
+    return send_from_directory("uploads/products", filename)
 
 if __name__ == "__main__":
     socketio.run(
