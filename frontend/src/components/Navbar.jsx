@@ -42,8 +42,8 @@ export default function Navbar() {
         {/* ADMIN */}
         {user && user.role === "admin" && (
           <>
-            <Link to="/admin">Admin Panel</Link>
-            <Link to="/admin-profile">Admin Info</Link>
+            <Link to="/admin">Admin panel</Link>
+            
             <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
