@@ -1,38 +1,108 @@
+/* navbar.css */
+
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background: linear-gradient(90deg, #1b181f, #2575fc);
-  color: white;
+  padding: 14px 28px;
+
+  /* 🌈 modern gradient background */
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+
+  /* 💎 glass effect */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-/* LOGO */
+/* Logo */
 .logo {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
-  color: white;
+  color: #ffffff;
+  letter-spacing: 1px;
 }
 
-/* LINKS */
+/* Nav links container */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Links */
 .nav-links a {
-  margin-left: 15px;
   text-decoration: none;
-  color: white;   /* FIXED */
+  color: #e2e8f0;
   font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-/* BUTTON STYLE */
-.btn {
-  padding: 6px 12px;
-  background: white;
-  color: black;
-  border-radius: 6px;
+/* Hover glow effect */
+.nav-links a:hover {
+  color: #ffffff;
+  background: rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+  transform: translateY(-2px);
 }
 
-/* OUTLINE BUTTON */
-.btn.outline {
-  background: transparent;
-  border: 1px solid white;
-  color: white;   /* FIXED */
+/* Active animation underline */
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background: #3b82f6;
+  transition: 0.3s;
+}
+
+.nav-links a:hover::after {
+  left: 0;
+  width: 100%;
+}
+
+/* Logout button (🔥 premium button) */
+.logout-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+}
+
+/* Hover effect */
+.logout-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.5);
+}
+
+/* Click effect */
+.logout-btn:active {
+  transform: scale(0.95);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
