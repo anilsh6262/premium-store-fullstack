@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { API } from "../services/api";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "../styles/auth.css";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [form, setForm] = useState({
     email: "",
@@ -15,47 +17,37 @@ export default function Login() {
     if (e) e.preventDefault();
 
     try {
-     const res = await API.post("/api/auth/login", form);
+      const res = await API.post("/api/auth/login", form);
+      const data = res.data;
 
-console.log("FULL RESPONSE:", res);
+      console.log("LOGIN RESPONSE:", data);
 
-const data = res.data;
-
-console.log("DATA:", data);
-      // ✅ validate response
       if (!data || !data.token) {
         throw new Error("Invalid login response");
       }
 
-     const user = data.user || { role: "user" };
+      const user = data.user || { role: "user" };
 
-console.log("USER OBJECT:", user);
-localStorage.setItem("user", JSON.stringify(user));
-console.log(
-  "SAVED USER:",
-  localStorage.getItem("user")
-);
-      // ✅ save to localStorage
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(user));
+      // ✅ use context instead of direct localStorage
+      login(user, data.token);
 
       alert("Login Successful");
 
       console.log("LOGIN USER:", user);
 
-      // 🚀 FIXED ADMIN REDIRECT
+      // 🚀 role-based navigation
       if (user.role === "admin") {
-        window.location.href = "/admin";
+        navigate("/admin");
       } else {
-        navigate("/products");
+        navigate("/products"); // better UX than home
       }
 
     } catch (err) {
-  console.log("STATUS:", err.response?.status);
-  console.log("DATA:", err.response?.data);
-  console.log("ERROR:", err);
-  alert("Login Failed");
-}
+      console.log("STATUS:", err.response?.status);
+      console.log("DATA:", err.response?.data);
+      console.log("ERROR:", err);
+      alert("Login Failed");
+    }
   };
 
   return (
