@@ -1,91 +1,38 @@
 .navbar {
-  background: #111827;
-  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 50px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.logo {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.nav-links a {
-  text-decoration: none;
+  padding: 15px 30px;
+  background: linear-gradient(90deg, #1b181f, #2575fc);
   color: white;
+}
+
+/* LOGO */
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+/* LINKS */
+.nav-links a {
+  margin-left: 15px;
+  text-decoration: none;
+  color: white;   /* FIXED */
   font-weight: 500;
 }
 
-.login-btn,
-.register-btn,
-.dashboard-btn,
-.logout-btn {
-  padding: 10px 18px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
+/* BUTTON STYLE */
+.btn {
+  padding: 6px 12px;
+  background: white;
+  color: black;
+  border-radius: 6px;
 }
 
-.login-btn {
-  border: 1px solid #3b82f6;
-}
-
-.register-btn {
-  background: #2563eb;
-  color: white !important;
-}
-
-.dashboard-btn {
-  background: #059669;
-  color: white !important;
-}
-
-.logout-btn {
-  background: #ef4444;
-  color: white;
-}
-
-.user-info {
-  background: rgba(255,255,255,0.1);
-  padding: 10px 15px;
-  border-radius: 20px;
-  color: #fbbf24;
-  font-weight: bold;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    padding: 15px;
-  }
-
-  .logo {
-    margin-bottom: 15px;
-    font-size: 24px;
-  }
-
-  .nav-links {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .login-btn,
-  .register-btn,
-  .dashboard-btn,
-  .logout-btn {
-    padding: 8px 14px;
-  }
+/* OUTLINE BUTTON */
+.btn.outline {
+  background: transparent;
+  border: 1px solid white;
+  color: white;   /* FIXED */
 }
