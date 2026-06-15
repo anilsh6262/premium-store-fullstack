@@ -1,47 +1,79 @@
-import { Link } from "react-router-dom";
 import "../styles/home.css";
 
 export default function Home() {
   return (
     <div className="home-container">
-      <div className="navbar"></div>
-      
+
       {/* HERO SECTION */}
       <div className="hero">
-        <h1>✨ Premium Products Store</h1>
-        <p>Discover handmade & custom gifts at best price</p>
-      </div>
-
-      {/* PRODUCTS GRID */}
-      <div className="products-section">
-        <h2>🔥 Latest Products</h2>
-
-        <div className="product-grid">
-
-          {/* SAMPLE CARD (we will connect API later) */}
-          <div className="product-card">
-            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" />
-            <h3>Birthday Frame</h3>
-            <p>Beautiful handmade gift</p>
-            <span>₹499</span>
-          </div>
-
-          <div className="product-card">
-            <img src="https://images.unsplash.com/photo-1520975916090-3105956dac38" />
-            <h3>Custom Photo Frame</h3>
-            <p>Personalized design</p>
-            <span>₹699</span>
-          </div>
-
-          <div className="product-card">
-            <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38" />
-            <h3>Mini Gift Box</h3>
-            <p>Surprise box set</p>
-            <span>₹299</span>
-          </div>
-
+        <div className="overlay">
+          <h1>🛍️ Premium Store</h1>
+          <p>
+            A modern online shopping platform where customers can
+            browse products, place orders, and enjoy a smooth
+            shopping experience.
+          </p>
         </div>
       </div>
+
+      {/* ABOUT SECTION */}
+      <section className="about-section">
+        <h2>About Our Store</h2>
+
+        <p>
+          Premium Store is a full-stack e-commerce platform built to
+          provide customers with a secure and user-friendly shopping
+          experience. Users can browse products, view details, and
+          purchase items online with ease.
+        </p>
+
+        <p>
+          The platform includes customer authentication, product
+          management, admin dashboard functionality, and a responsive
+          design that works across desktop and mobile devices.
+        </p>
+      </section>
+
+      {/* FEATURES */}
+      <section className="features-section">
+        <h2>Why Choose Us?</h2>
+
+        <div className="features-grid">
+          <div className="feature-card">
+            <h3>🔒 Secure Login</h3>
+            <p>User authentication with JWT security.</p>
+          </div>
+
+          <div className="feature-card">
+            <h3>🛒 Easy Shopping</h3>
+            <p>Browse and purchase products effortlessly.</p>
+          </div>
+
+          <div className="feature-card">
+            <h3>⚡ Fast Performance</h3>
+            <p>Built using React, Flask and MongoDB.</p>
+          </div>
+
+          <div className="feature-card">
+            <h3>📱 Responsive Design</h3>
+            <p>Works seamlessly on mobile and desktop.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT */}
+      <section className="contact-section">
+        <h2>Contact Us</h2>
+
+        <p>Email: support@premiumstore.com</p>
+        <p>Phone: +91 98765 43210</p>
+        <p>Location: Bangalore, Karnataka, India</p>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="footer">
+        <p>© 2026 Premium Store. All Rights Reserved.</p>
+      </footer>
 
     </div>
   );
