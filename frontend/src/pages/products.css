@@ -1,46 +1,108 @@
+/* ===== MAIN CONTAINER ===== */
 .products-container {
-  padding: 20px;
-  text-align: center;
+  padding: 30px;
+  background: #0f172a;
+  min-height: 100vh;
+  color: white;
 }
 
+/* ===== TITLE ===== */
 .title {
+  text-align: center;
   font-size: 28px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-weight: 700;
 }
 
+/* ===== GRID LAYOUT ===== */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
 }
 
+/* ===== PRODUCT CARD (FIXED SIZE) ===== */
 .product-card {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: 0.3s;
+  background: #1e293b;
+  border-radius: 14px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  height: 420px; /* ✅ FIXED HEIGHT */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+
+  transition: all 0.3s ease;
 }
 
 .product-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(59, 130, 246, 0.25);
 }
 
+/* ===== IMAGE FIX ===== */
 .product-card img {
   width: 100%;
-  border-radius: 10px;
+  height: 180px;        /* ✅ FIXED IMAGE HEIGHT */
+  object-fit: cover;    /* keeps image clean */
+  background: #0f172a;
 }
 
+/* ===== CONTENT AREA ===== */
 .product-card h3 {
-  margin: 10px 0;
+  font-size: 18px;
+  margin: 10px 12px 5px;
+  color: #ffffff;
 }
 
+.product-card p {
+  font-size: 14px;
+  margin: 4px 12px;
+  color: #cbd5e1;
+
+  /* prevent overflow */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;  /* limit description lines */
+  -webkit-box-orient: vertical;
+}
+
+/* ===== PRICE ===== */
+.product-card p strong {
+  color: #22c55e;
+  font-size: 16px;
+}
+
+/* ===== BUTTON ===== */
 .product-card button {
-  background: black;
-  color: white;
-  padding: 8px;
+  margin: auto 12px 12px;
+  padding: 10px;
+
   border: none;
-  width: 100%;
-  border-radius: 5px;
+  border-radius: 10px;
+
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  font-weight: 600;
+
   cursor: pointer;
+  transition: 0.3s;
+}
+
+.product-card button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .product-card {
+    height: auto;
+  }
+
+  .product-card img {
+    height: 200px;
+  }
 }
