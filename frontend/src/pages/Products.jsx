@@ -16,6 +16,11 @@ export default function Products() {
 
       console.log("PRODUCTS:", res.data);
 
+      res.data.forEach((item) => {
+        console.log("PRODUCT:", item);
+        console.log("IMAGE:", item.images);
+      });
+
       setProducts(res.data);
     } catch (err) {
       console.log(
@@ -49,12 +54,18 @@ export default function Products() {
               className="product-card"
               key={item._id}
             >
-              {/* PRODUCT IMAGE */}
-              {item.images &&
-              item.images.length > 0 ? (
+              {item.images && item.images.length > 0 ? (
                 <img
-                  src={`https://premium-store-fullstack-1.onrender.com/uploads/products/${item.images[0]}`}
+                  src={`https://premium-store-fullstack-1.onrender.com/${item.images[0]}`}
                   alt={item.name}
+                  onError={(e) => {
+                    console.log(
+                      "IMAGE FAILED:",
+                      item.images[0]
+                    );
+                    e.target.src =
+                      "https://via.placeholder.com/300x200?text=Image+Not+Found";
+                  }}
                 />
               ) : (
                 <img
