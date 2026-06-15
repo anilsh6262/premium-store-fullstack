@@ -2,37 +2,29 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background: linear-gradient(90deg, #1b181f, #2575fc);
-  color: white;
+  padding: 15px 40px;
+  background: #111827;
 }
 
-/* LOGO */
 .logo {
-  font-size: 20px;
-  font-weight: bold;
   color: white;
 }
 
-/* LINKS */
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
 .nav-links a {
-  margin-left: 15px;
+  color: white;
   text-decoration: none;
-  color: white;   /* FIXED */
   font-weight: 500;
 }
 
-/* BUTTON STYLE */
-.btn {
-  padding: 6px 12px;
-  background: white;
-  color: black;
-  border-radius: 6px;
-}
-
-/* OUTLINE BUTTON */
-.btn.outline {
-  background: transparent;
-  border: 1px solid white;
-  color: white;   /* FIXED */
+.nav-links button {
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
