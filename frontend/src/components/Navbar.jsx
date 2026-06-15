@@ -12,7 +12,9 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <h2 className="logo">🛍️ Premium Store</h2>
+      <div className="logo">
+        🛍️ Premium Store
+      </div>
 
       <div className="nav-links">
         <Link to="/">Home</Link>
@@ -20,18 +22,25 @@ export default function Navbar() {
 
         {!user ? (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+            <Link className="login-btn" to="/login">
+              Login
+            </Link>
+
+            <Link className="register-btn" to="/register">
+              Register
+            </Link>
           </>
         ) : (
           <>
             {user.role === "admin" && (
-              <Link to="/admin">Dashboard</Link>
+              <Link className="dashboard-btn" to="/admin">
+                Dashboard
+              </Link>
             )}
 
-            <span className="username">
+            <div className="user-badge">
               👤 {user.name}
-            </span>
+            </div>
 
             <button
               className="logout-btn"
