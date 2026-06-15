@@ -1,32 +1,21 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import "./navbar.css";
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const loadUser = () => {
-      const savedUser = JSON.parse(
-        localStorage.getItem("user")
-      );
-      setUser(savedUser);
-    };
+    const savedUser = JSON.parse(
+      localStorage.getItem("user")
+    );
 
-    loadUser();
-
-    window.addEventListener("storage", loadUser);
-
-    return () => {
-      window.removeEventListener("storage", loadUser);
-    };
+    setUser(savedUser);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
-    setUser(null);
 
     window.location.href = "/";
   };
@@ -38,14 +27,11 @@ export default function Navbar() {
       </div>
 
       <div className="nav-links">
-        <Link to="/">Home</Link>
-
-        <Link to="/products">
-          Products
-        </Link>
 
         {!user ? (
           <>
+            <Link to="/">Home</Link>
+
             <Link
               className="login-btn"
               to="/login"
@@ -62,6 +48,10 @@ export default function Navbar() {
           </>
         ) : (
           <>
+            <Link to="/products">
+              Products
+            </Link>
+
             {user.role === "admin" && (
               <Link
                 className="dashboard-btn"
