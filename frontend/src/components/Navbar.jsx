@@ -4,6 +4,12 @@ import "./navbar.css";
 export default function Navbar() {
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/";
+  };
+
   return (
     <nav className="navbar">
       <h2 className="logo">🛍️ Premium Store</h2>
@@ -23,12 +29,13 @@ export default function Navbar() {
               <Link to="/admin">Dashboard</Link>
             )}
 
+            <span className="username">
+              👤 {user.name}
+            </span>
+
             <button
-              onClick={() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                window.location.href = "/";
-              }}
+              className="logout-btn"
+              onClick={handleLogout}
             >
               Logout
             </button>
