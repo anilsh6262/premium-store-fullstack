@@ -32,7 +32,7 @@ export default function Navbar() {
         {user && user.role === "user" && (
           <>
             <Link to="/products">Products</Link>
-            <Link to="/profile">User Info</Link>
+           
             <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
