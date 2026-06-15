@@ -1,16 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import "./navbar.css";
 
 export default function Navbar() {
-  const navigate = useNavigate();
-
   const user = JSON.parse(localStorage.getItem("user"));
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/login");
-    window.location.reload();
-  };
 
   return (
     <nav className="navbar">
@@ -27,18 +19,17 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <span>
-              Welcome, {user.name || user.email}
-            </span>
-
             {user.role === "admin" && (
-              <>
-                <Link to="/admin">Dashboard</Link>
-                <Link to="/add-product">Add Product</Link>
-              </>
+              <Link to="/admin">Dashboard</Link>
             )}
 
-            <button onClick={logout}>
+            <button
+              onClick={() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                window.location.href = "/";
+              }}
+            >
               Logout
             </button>
           </>
