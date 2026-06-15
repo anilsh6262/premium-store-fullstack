@@ -12,9 +12,7 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="logo">
-        🛍️ Premium Store
-      </div>
+      <div className="logo">🛍️ Premium Store</div>
 
       <div className="nav-links">
         <Link to="/">Home</Link>
@@ -38,7 +36,7 @@ export default function Navbar() {
               </Link>
             )}
 
-            <div className="user-badge">
+            <div className="user-info">
               👤 {user.name}
             </div>
 

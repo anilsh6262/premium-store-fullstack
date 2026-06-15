@@ -1,96 +1,91 @@
 .navbar {
+  background: #111827;
+  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 70px;
-  background: #111827;
-  box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+  padding: 15px 50px;
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
 .logo {
-  color: white;
   font-size: 28px;
-  font-weight: 700;
-  cursor: pointer;
+  font-weight: bold;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
 
 .nav-links a {
   text-decoration: none;
   color: white;
-  font-size: 16px;
   font-weight: 500;
-  transition: 0.3s;
 }
 
-.nav-links a:hover {
-  color: #60a5fa;
+.login-btn,
+.register-btn,
+.dashboard-btn,
+.logout-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
 }
 
 .login-btn {
-  background: transparent;
-  border: 1px solid #60a5fa;
-  padding: 10px 20px;
-  border-radius: 8px;
+  border: 1px solid #3b82f6;
 }
 
 .register-btn {
   background: #2563eb;
-  padding: 10px 20px;
-  border-radius: 8px;
   color: white !important;
 }
 
 .dashboard-btn {
   background: #059669;
-  padding: 10px 20px;
-  border-radius: 8px;
   color: white !important;
-}
-
-.user-badge {
-  background: rgba(255,255,255,0.12);
-  color: #fbbf24;
-  padding: 10px 18px;
-  border-radius: 25px;
-  font-weight: 600;
 }
 
 .logout-btn {
   background: #ef4444;
   color: white;
-  border: none;
-  padding: 10px 22px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  transition: 0.3s;
 }
 
-.logout-btn:hover,
-.register-btn:hover,
-.dashboard-btn:hover {
-  transform: translateY(-2px);
+.user-info {
+  background: rgba(255,255,255,0.1);
+  padding: 10px 15px;
+  border-radius: 20px;
+  color: #fbbf24;
+  font-weight: bold;
 }
 
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .navbar {
-    padding: 15px 20px;
     flex-direction: column;
-    gap: 15px;
+    padding: 15px;
+  }
+
+  .logo {
+    margin-bottom: 15px;
+    font-size: 24px;
   }
 
   .nav-links {
     flex-wrap: wrap;
     justify-content: center;
+    gap: 10px;
+  }
+
+  .login-btn,
+  .register-btn,
+  .dashboard-btn,
+  .logout-btn {
+    padding: 8px 14px;
   }
 }
