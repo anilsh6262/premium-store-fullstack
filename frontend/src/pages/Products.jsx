@@ -14,9 +14,6 @@ export default function Products() {
   const loadProducts = async () => {
     try {
       const res = await API.get("/api/products");
-
-      console.log("PRODUCTS:", res.data);
-
       setProducts(res.data);
     } catch (err) {
       console.log("PRODUCT ERROR:", err.response?.data || err.message);
@@ -42,34 +39,39 @@ export default function Products() {
         <p>No products found.</p>
       ) : (
         <div className="products-grid">
-          {products.map((item) => (
-            <div className="product-card" key={item._id}>
-              
-              {/* IMAGE FIX (FINAL CLEAN VERSION) */}
-              <img
-                src={
-                  item.images && item.images.length > 0
-                    ? `${BASE_URL}/${item.images[0]}`
-                    : "https://via.placeholder.com/300x200?text=No+Image"
-                }
-                alt={item.name}
-                onError={(e) => {
-                  console.log("IMAGE FAILED:", item.images?.[0]);
-                  e.target.src =
-                    "https://via.placeholder.com/300x200?text=Image+Not+Found";
-                }}
-              />
+          {products.map((item) => {
 
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
+            // ✅ FIX: extract only filename
+            const filename =
+              item.images?.[0]?.split("/").pop();
 
-              <p>
-                <strong>₹ {item.price}</strong>
-              </p>
+            return (
+              <div className="product-card" key={item._id}>
+                
+                <img
+                  src={
+                    filename
+                      ? `${BASE_URL}/uploads/products/${filename}`
+                      : "https://via.placeholder.com/300x200?text=No+Image"
+                  }
+                  alt={item.name}
+                  onError={(e) => {
+                    e.target.src =
+                      "https://via.placeholder.com/300x200?text=Image+Not+Found";
+                  }}
+                />
 
-              <button>Add to Cart</button>
-            </div>
-          ))}
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
+
+                <p>
+                  <strong>₹ {item.price}</strong>
+                </p>
+
+                <button>Add to Cart</button>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
