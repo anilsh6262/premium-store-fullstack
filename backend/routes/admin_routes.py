@@ -43,6 +43,7 @@ def admin_required(fn):
 def add_product():
 
     claims = get_jwt()
+
     if claims.get("role") != "admin":
         return jsonify({"message": "Admin only access"}), 403
 
@@ -57,17 +58,30 @@ def add_product():
             return jsonify({"message": "Product name required"}), 400
 
         image_paths = []
+
         files = request.files.getlist("images")
 
         for file in files:
+
             if file.filename == "":
                 continue
 
             filename = secure_filename(file.filename)
-            filepath = os.path.join(UPLOAD_FOLDER, filename)
+
+            unique_filename = (
+                f"{int(datetime.utcnow().timestamp())}_{filename}"
+            )
+
+            filepath = os.path.join(
+                UPLOAD_FOLDER,
+                unique_filename
+            )
+
             file.save(filepath)
 
-            image_paths.append(filepath)
+            image_paths.append(
+                filepath.replace("\\", "/")
+            )
 
         product = {
             "name": name,
@@ -93,7 +107,9 @@ def add_product():
         }), 201
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({
+            "error": str(e)
+        }), 500
 
 
 # ----------------------------------
