@@ -55,9 +55,9 @@ export default function Products() {
                       : "https://via.placeholder.com/300x200?text=No+Image"
                   }
                   alt={item.name}
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/300x200?text=Image+Not+Found";
+  onError={(e) => {
+    e.target.src =
+      "https://dummyimage.com/300x200/cccccc/000000&text=Image+Not+Found";
                   }}
                 />
 
