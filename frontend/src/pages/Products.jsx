@@ -13,9 +13,15 @@ export default function Products() {
   const loadProducts = async () => {
     try {
       const res = await API.get("/api/products");
+
+      console.log("PRODUCTS:", res.data);
+
       setProducts(res.data);
     } catch (err) {
-      console.log("PRODUCT ERROR:", err.response?.data || err.message);
+      console.log(
+        "PRODUCT ERROR:",
+        err.response?.data || err.message
+      );
     } finally {
       setLoading(false);
     }
@@ -38,43 +44,39 @@ export default function Products() {
         <p>No products found.</p>
       ) : (
         <div className="products-grid">
-          {products.map((item) => {
-            const image = item.images?.[0];
+          {products.map((item) => (
+            <div className="product-card" key={item._id}>
+              <img
+                src={
+                  item.images?.[0] ||
+                  "https://dummyimage.com/300x200/cccccc/000000&text=No+Image"
+                }
+                alt={item.name}
+                className="product-image"
+                onError={(e) => {
+                  console.log(
+                    "IMAGE FAILED:",
+                    item.images?.[0]
+                  );
 
-            return (
-              <div className="product-card" key={item._id}>
-                
-                {/* IMAGE (CLOUDINARY READY) */}
-                <img
-                  src={
-                    image
-                      ? image
-                      : "https://dummyimage.com/300x200/cccccc/000000&text=No+Image"
-                  }
-                  alt={item.name}
-                  style={{
-                    width: "100%",
-                    height: "200px",
-                    objectFit: "cover",
-                    borderRadius: "8px",
-                  }}
-                  onError={(e) => {
-                    e.target.src =
-                      "https://dummyimage.com/300x200/cccccc/000000&text=Image+Not+Found";
-                  }}
-                />
+                  e.target.src =
+                    "https://dummyimage.com/300x200/cccccc/000000&text=Image+Not+Found";
+                }}
+              />
 
-                <h3>{item.name}</h3>
-                <p>{item.description}</p>
+              <h3>{item.name}</h3>
 
-                <p>
-                  <strong>₹ {item.price}</strong>
-                </p>
+              <p>{item.description}</p>
 
-                <button>Add to Cart</button>
-              </div>
-            );
-          })}
+              <p>
+                <strong>₹{item.price}</strong>
+              </p>
+
+              <button className="cart-btn">
+                Add to Cart
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </div>
