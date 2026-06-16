@@ -16,7 +16,7 @@ import Navbar from "./components/Navbar";
 function App() {
   return (
     <>
-      {/* NAVBAR (visible on all pages) */}
+      {/* NAVBAR */}
       <Navbar />
 
       <Routes>
@@ -53,25 +53,26 @@ function App() {
             </AdminRoute>
           }
         />
+
         <Route
-  path="/orders"
-  element={
-    <AdminRoute>
-      <Orders />
-    </AdminRoute>
-  }
-/>
+          path="/orders"
+          element={
+            <AdminRoute>
+              <Orders />
+            </AdminRoute>
+          }
+        />
 
-<Route
-  path="/users"
-  element={
-    <AdminRoute>
-      <Users />
-    </AdminRoute>
-  }
-/>
+        <Route
+          path="/users"
+          element={
+            <AdminRoute>
+              <Users />
+            </AdminRoute>
+          }
+        />
 
-        {/* ================= 404 PAGE (IMPORTANT) ================= */}
+        {/* ================= 404 PAGE ================= */}
         <Route
           path="*"
           element={

@@ -4,32 +4,39 @@ from bson import ObjectId
 product_bp = Blueprint("product_bp", __name__)
 
 
-# Get all products
+# ---------------------------
+# GET ALL PRODUCTS
+# ---------------------------
 @product_bp.route("/", methods=["GET"])
 def get_products():
-
     db = current_app.db
 
     products = []
 
     for product in db.products.find().sort("createdAt", -1):
 
+        images = product.get("images", [])
+
         products.append({
             "_id": str(product["_id"]),
             "name": product.get("name"),
             "description": product.get("description"),
             "price": product.get("price"),
-            "images": product.get("images", []),
+
+            # IMPORTANT: images can be Cloudinary URLs OR filenames
+            "images": images,
+
             "createdAt": str(product.get("createdAt"))
         })
 
     return jsonify(products), 200
 
 
-# Get single product
+# ---------------------------
+# GET SINGLE PRODUCT
+# ---------------------------
 @product_bp.route("/<product_id>", methods=["GET"])
 def get_product(product_id):
-
     db = current_app.db
 
     try:
@@ -38,9 +45,7 @@ def get_product(product_id):
         })
 
         if not product:
-            return jsonify({
-                "message": "Product not found"
-            }), 404
+            return jsonify({"message": "Product not found"}), 404
 
         return jsonify({
             "_id": str(product["_id"]),
@@ -52,20 +57,17 @@ def get_product(product_id):
         }), 200
 
     except Exception as e:
-        return jsonify({
-            "message": str(e)
-        }), 500
+        return jsonify({"message": str(e)}), 500
 
 
-# Search products
+# ---------------------------
+# SEARCH PRODUCTS
+# ---------------------------
 @product_bp.route("/search", methods=["GET"])
 def search_products():
-
     db = current_app.db
 
     keyword = request.args.get("keyword", "")
-
-    products = []
 
     query = {
         "name": {
@@ -73,6 +75,8 @@ def search_products():
             "$options": "i"
         }
     }
+
+    products = []
 
     for product in db.products.find(query):
 
@@ -87,10 +91,11 @@ def search_products():
     return jsonify(products), 200
 
 
-# Latest products
+# ---------------------------
+# LATEST PRODUCTS
+# ---------------------------
 @product_bp.route("/latest", methods=["GET"])
 def latest_products():
-
     db = current_app.db
 
     products = []

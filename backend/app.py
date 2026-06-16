@@ -1,12 +1,22 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_socketio import SocketIO
 from pymongo import MongoClient
-from flask import send_from_directory
+
+import cloudinary
 
 from config import Config
 
+
+# ---------------------------
+# CLOUDINARY CONFIG
+# ---------------------------
+cloudinary.config(
+    cloud_name="anil",
+    api_key="973216172567269",
+    api_secret="ewQa0JLVtudW_jOIz_d8RTVXtEE"
+)
 
 print("MONGO_URI =", Config.MONGO_URI)
 print("JWT_SECRET_KEY =", Config.JWT_SECRET_KEY)
@@ -16,18 +26,19 @@ print("JWT_SECRET_KEY =", Config.JWT_SECRET_KEY)
 # ---------------------------
 app = Flask(__name__)
 
-
 # ---------------------------
 # CONFIG
 # ---------------------------
 app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
-from flask_cors import CORS
-CORS(app, resources={r"/*": {"origins": "*"}})
+
 # ---------------------------
-# EXTENSIONS
+# CORS
 # ---------------------------
 CORS(app)
 
+# ---------------------------
+# EXTENSIONS
+# ---------------------------
 jwt = JWTManager(app)
 
 socketio = SocketIO(
@@ -46,56 +57,22 @@ app.db = db
 app.socketio = socketio
 
 # ---------------------------
-# IMPORT BLUEPRINTS (IMPORTANT)
+# BLUEPRINTS
 # ---------------------------
 from routes.auth_routes import auth_bp
 from routes.product_routes import product_bp
 from routes.admin_routes import admin_bp
 
-# ---------------------------
-# REGISTER BLUEPRINTS
-# ---------------------------
-
-# AUTH → /api/auth/login
-app.register_blueprint(
-    auth_bp,
-    url_prefix="/api/auth"
-)
-
-# PRODUCTS → /api/products
-app.register_blueprint(
-    product_bp,
-    url_prefix="/api/products"
-)
-
-# ADMIN → /api/admin
-app.register_blueprint(
-    admin_bp,
-    url_prefix="/api/admin"
-
-    
-)
-
-
-
-@app.route("/uploads/products/<filename>")
-def uploaded_file(filename):
-    return send_from_directory(
-        "uploads/products",
-        filename
-    )
-
+app.register_blueprint(auth_bp, url_prefix="/api/auth")
+app.register_blueprint(product_bp, url_prefix="/api/products")
+app.register_blueprint(admin_bp, url_prefix="/api/admin")
 
 # ---------------------------
-
-
+# BASIC ROUTES
 # ---------------------------
-# RUN SERVER
-# ---------------------------
-import os
 @app.route("/")
 def home():
-    return {"message": "Backend Running"}
+    return jsonify({"message": "Backend Running"})
 
 @app.route("/test-db")
 def test_db():
@@ -104,12 +81,11 @@ def test_db():
         return {"status": "MongoDB Connected"}
     except Exception as e:
         return {"status": "Failed", "error": str(e)}
-from flask import send_from_directory
-import os
 
-@app.route("/uploads/products/<path:filename>")
-def uploaded_file(filename):
-    return send_from_directory("uploads/products", filename)
+# ---------------------------
+# RUN SERVER
+# ---------------------------
+import os
 
 if __name__ == "__main__":
     socketio.run(

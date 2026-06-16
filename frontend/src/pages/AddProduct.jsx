@@ -13,7 +13,6 @@ export default function AddProduct() {
 
   const addProduct = async () => {
     try {
-      // ✅ VALIDATION (must fill all fields)
       if (!name || !description || !price || images.length === 0) {
         alert("⚠️ Please fill all fields and select images");
         return;
@@ -34,17 +33,17 @@ export default function AddProduct() {
       await API.post("/api/admin/product", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       });
 
       alert("Product Added Successfully 🎉");
 
-      // ✅ REDIRECT TO PRODUCTS PAGE
       navigate("/products");
 
     } catch (err) {
       console.log("STATUS:", err.response?.status);
-      console.log("DATA:", JSON.stringify(err.response?.data));
+      console.log("DATA:", err.response?.data);
       console.log("FULL ERROR:", err);
       alert("Failed to add product");
     }
@@ -55,50 +54,34 @@ export default function AddProduct() {
       <div className="add-product-card">
         <h2 className="add-product-title">➕ Add Product</h2>
 
-        <div className="form-group">
-          <input
-            className="form-control"
-            placeholder="Product Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+        <input
+          placeholder="Product Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-        <div className="form-group">
-          <textarea
-            className="form-control"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
+        <textarea
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
 
-        <div className="form-group">
-          <input
-            className="form-control"
-            type="number"
-            placeholder="Price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </div>
+        <input
+          type="number"
+          placeholder="Price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
 
-        <div className="form-group">
-          <input
-            className="file-upload"
-            type="file"
-            multiple
-            onChange={(e) => setImages(e.target.files)}
-          />
+        <input
+          type="file"
+          multiple
+          onChange={(e) => setImages(e.target.files)}
+        />
 
-          {images.length > 0 && (
-            <p className="preview-count">
-              {images.length} file(s) selected
-            </p>
-          )}
-        </div>
+        <p>{images.length > 0 && `${images.length} files selected`}</p>
 
-        <button className="add-product-btn" onClick={addProduct}>
+        <button onClick={addProduct}>
           Add Product
         </button>
       </div>

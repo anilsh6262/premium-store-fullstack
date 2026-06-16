@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { API } from "../services/api";
 import "./products.css";
-import { BASE_URL } from "../config";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -40,27 +39,31 @@ export default function Products() {
       ) : (
         <div className="products-grid">
           {products.map((item) => {
-
-            // ✅ FIX: extract only filename
-            const filename =
-              item.images?.[0]?.split("/").pop();
+            const imageUrl = item.images?.[0];
 
             return (
               <div className="product-card" key={item._id}>
                 
+                {/* IMAGE */}
                 <img
                   src={
-                    filename
-                      ? `${BASE_URL}/uploads/products/${filename}`
-                      : "https://via.placeholder.com/300x200?text=No+Image"
+                    imageUrl ||
+                    "https://dummyimage.com/300x200/cccccc/000000&text=No+Image"
                   }
                   alt={item.name}
-  onError={(e) => {
-    e.target.src =
-      "https://dummyimage.com/300x200/cccccc/000000&text=Image+Not+Found";
+                  style={{
+                    width: "100%",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                  }}
+                  onError={(e) => {
+                    e.target.src =
+                      "https://dummyimage.com/300x200/cccccc/000000&text=Image+Not+Found";
                   }}
                 />
 
+                {/* PRODUCT INFO */}
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>
 

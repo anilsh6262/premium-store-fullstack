@@ -2,21 +2,17 @@ import os
 from datetime import datetime
 
 from flask import Blueprint, request, jsonify, current_app
-
 from flask_jwt_extended import jwt_required, get_jwt
-
 from bson import ObjectId
-from werkzeug.utils import secure_filename
+
+import cloudinary.uploader
 
 
 admin_bp = Blueprint("admin_bp", __name__)
 
-UPLOAD_FOLDER = "uploads/products"
-
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # ----------------------------------
-# ADMIN CHECK DECORATOR (FIXED)
+# ADMIN CHECK DECORATOR (UNCHANGED)
 # ----------------------------------
 def admin_required(fn):
     def wrapper(*args, **kwargs):
@@ -36,7 +32,7 @@ def admin_required(fn):
 
 
 # ----------------------------------
-# ADD PRODUCT
+# ADD PRODUCT (CLOUDINARY FIXED)
 # ----------------------------------
 @admin_bp.route("/product", methods=["POST"])
 @jwt_required()
@@ -57,7 +53,7 @@ def add_product():
         if not name:
             return jsonify({"message": "Product name required"}), 400
 
-        image_paths = []
+        image_urls = []
 
         files = request.files.getlist("images")
 
@@ -66,28 +62,18 @@ def add_product():
             if file.filename == "":
                 continue
 
-            filename = secure_filename(file.filename)
+            # ----------------------------------
+            # UPLOAD TO CLOUDINARY (IMPORTANT)
+            # ----------------------------------
+            result = cloudinary.uploader.upload(file)
 
-            unique_filename = (
-                f"{int(datetime.utcnow().timestamp())}_{filename}"
-            )
-
-            filepath = os.path.join(
-                UPLOAD_FOLDER,
-                unique_filename
-            )
-
-            file.save(filepath)
-
-            image_paths.append(
-                filepath.replace("\\", "/")
-            )
+            image_urls.append(result["secure_url"])
 
         product = {
             "name": name,
             "description": description,
             "price": float(price),
-            "images": image_paths,
+            "images": image_urls,
             "createdAt": datetime.utcnow()
         }
 
@@ -169,9 +155,8 @@ def delete_product(product_id):
         if not product:
             return jsonify({"message": "Product not found"}), 404
 
-        for image in product.get("images", []):
-            if os.path.exists(image):
-                os.remove(image)
+        # OPTIONAL: Cloudinary delete can be added later
+        # (not required for basic setup)
 
         db.products.delete_one({"_id": ObjectId(product_id)})
 
@@ -205,4 +190,4 @@ def admin_products():
             "createdAt": str(product.get("createdAt"))
         })
 
-    return jsonify(products)
+    return jsonify(products), 200
