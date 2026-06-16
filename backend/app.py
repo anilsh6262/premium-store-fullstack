@@ -12,9 +12,9 @@ import os
 # CLOUDINARY CONFIG
 # ---------------------------
 cloudinary.config(
-    cloud_name="Root",
-    api_key="394717172676224",
-    api_secret="MvuDdUDSIgP7Uw9KNfOy0IIJMM4"
+    cloud_name="root23",
+    api_key="422718894549344",
+    api_secret="hEa7Z5CNGe5y_EZz8Rkk38ftMbE"
 )
 
 print("MONGO_URI =", Config.MONGO_URI)
