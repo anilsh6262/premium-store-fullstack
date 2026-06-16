@@ -41,12 +41,28 @@ def add_product():
         files = request.files.getlist("images")
 
         for file in files:
+
             if file.filename == "":
                 continue
 
-            # upload to cloudinary
-            result = cloudinary.uploader.upload(file)
-            image_urls.append(result["secure_url"])
+            try:
+                # Upload image to Cloudinary
+                result = cloudinary.uploader.upload(file)
+
+                print("================================")
+                print("CLOUDINARY RESULT:", result)
+                print("SECURE URL:", result.get("secure_url"))
+                print("PUBLIC ID:", result.get("public_id"))
+                print("================================")
+
+                image_urls.append(result["secure_url"])
+
+            except Exception as upload_error:
+                print("CLOUDINARY ERROR:", str(upload_error))
+
+                return jsonify({
+                    "error": f"Cloudinary Upload Failed: {str(upload_error)}"
+                }), 500
 
         product = {
             "name": name,
@@ -56,25 +72,25 @@ def add_product():
             "createdAt": datetime.utcnow()
         }
 
-        result = db.products.insert_one(product)
+        inserted = db.products.insert_one(product)
 
         current_app.socketio.emit(
             "new_product",
             {
                 "message": f"{name} added",
-                "productId": str(result.inserted_id)
+                "productId": str(inserted.inserted_id)
             }
         )
 
         return jsonify({
             "message": "Product added successfully",
-            "product_id": str(result.inserted_id)
+            "product_id": str(inserted.inserted_id),
+            "images": image_urls
         }), 201
 
     except Exception as e:
+        print("ADD PRODUCT ERROR:", str(e))
         return jsonify({"error": str(e)}), 500
-
-
 # ----------------------------------
 # UPDATE PRODUCT
 # ----------------------------------

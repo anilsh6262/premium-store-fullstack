@@ -3,8 +3,6 @@ from bson import ObjectId
 
 product_bp = Blueprint("product_bp", __name__)
 
-BASE_URL = "https://premium-store-fullstack-1.onrender.com"
-
 
 # ---------------------------
 # GET ALL PRODUCTS
@@ -17,19 +15,14 @@ def get_products():
 
     for product in db.products.find().sort("createdAt", -1):
 
-        images = product.get("images", [])
-
         products.append({
             "_id": str(product["_id"]),
             "name": product.get("name"),
             "description": product.get("description"),
             "price": product.get("price"),
 
-            # ✅ FIXED IMAGE URL
-            "images": [
-                f"{BASE_URL}/uploads/products/{img.split('/')[-1]}"
-                for img in images
-            ],
+            # RETURN ORIGINAL URL
+            "images": product.get("images", []),
 
             "createdAt": str(product.get("createdAt"))
         })
@@ -45,25 +38,19 @@ def get_product(product_id):
     db = current_app.db
 
     try:
-        product = db.products.find_one({"_id": ObjectId(product_id)})
+        product = db.products.find_one({
+            "_id": ObjectId(product_id)
+        })
 
         if not product:
             return jsonify({"message": "Product not found"}), 404
-
-        images = product.get("images", [])
 
         return jsonify({
             "_id": str(product["_id"]),
             "name": product.get("name"),
             "description": product.get("description"),
             "price": product.get("price"),
-
-            # ✅ FIXED HERE ALSO
-            "images": [
-                f"{BASE_URL}/uploads/products/{img.split('/')[-1]}"
-                for img in images
-            ],
-
+            "images": product.get("images", []),
             "createdAt": str(product.get("createdAt"))
         }), 200
 
@@ -80,25 +67,23 @@ def search_products():
 
     keyword = request.args.get("keyword", "")
 
-    query = {"name": {"$regex": keyword, "$options": "i"}}
+    query = {
+        "name": {
+            "$regex": keyword,
+            "$options": "i"
+        }
+    }
 
     products = []
 
     for product in db.products.find(query):
-
-        images = product.get("images", [])
 
         products.append({
             "_id": str(product["_id"]),
             "name": product.get("name"),
             "description": product.get("description"),
             "price": product.get("price"),
-
-            # ✅ FIXED
-            "images": [
-                f"{BASE_URL}/uploads/products/{img.split('/')[-1]}"
-                for img in images
-            ],
+            "images": product.get("images", [])
         })
 
     return jsonify(products), 200
@@ -113,23 +98,19 @@ def latest_products():
 
     products = []
 
-    cursor = db.products.find().sort("createdAt", -1).limit(8)
+    cursor = db.products.find().sort(
+        "createdAt",
+        -1
+    ).limit(8)
 
     for product in cursor:
-
-        images = product.get("images", [])
 
         products.append({
             "_id": str(product["_id"]),
             "name": product.get("name"),
             "description": product.get("description"),
             "price": product.get("price"),
-
-            # ✅ FIXED
-            "images": [
-                f"{BASE_URL}/uploads/products/{img.split('/')[-1]}"
-                for img in images
-            ],
+            "images": product.get("images", [])
         })
 
     return jsonify(products), 200
