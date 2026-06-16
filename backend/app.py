@@ -84,6 +84,7 @@ def test_db():
     except Exception as e:
         return {"status": "Failed", "error": str(e)}
 
+
 # ---------------------------
 # RUN SERVER
 # ---------------------------
