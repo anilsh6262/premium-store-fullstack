@@ -12,7 +12,7 @@ import os
 # CLOUDINARY CONFIG
 # ---------------------------
 cloudinary.config(
-    cloud_name="root23",
+    cloud_name="dvm6fi2ui",
     api_key="422718894549344",
     api_secret="hEa7Z5CNGe5y_EZz8Rkk38ftMbE"
 )
