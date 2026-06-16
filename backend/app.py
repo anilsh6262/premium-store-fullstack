@@ -3,11 +3,10 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_socketio import SocketIO
 from pymongo import MongoClient
-
 import cloudinary
 
 from config import Config
-
+import os
 
 # ---------------------------
 # CLOUDINARY CONFIG
@@ -68,12 +67,15 @@ app.register_blueprint(product_bp, url_prefix="/api/products")
 app.register_blueprint(admin_bp, url_prefix="/api/admin")
 
 # ---------------------------
-# BASIC ROUTES
+# HOME ROUTE
 # ---------------------------
 @app.route("/")
 def home():
     return jsonify({"message": "Backend Running"})
 
+# ---------------------------
+# DB TEST
+# ---------------------------
 @app.route("/test-db")
 def test_db():
     try:
@@ -85,8 +87,6 @@ def test_db():
 # ---------------------------
 # RUN SERVER
 # ---------------------------
-import os
-
 if __name__ == "__main__":
     socketio.run(
         app,

@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { API } from "../services/api";
 import "./products.css";
 
-const BASE_URL = "https://premium-store-fullstack-1.onrender.com";
-
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,22 +21,6 @@ export default function Products() {
     }
   };
 
-  const getImageUrl = (image) => {
-    if (!image) {
-      return "https://dummyimage.com/300x200/cccccc/000000&text=No+Image";
-    }
-
-    // If already full URL (Cloudinary etc.)
-    if (image.startsWith("http")) {
-      return image;
-    }
-
-    // Local backend image fix
-    const filename = image.split("/").pop();
-
-    return `${BASE_URL}/uploads/products/${filename}`;
-  };
-
   if (loading) {
     return (
       <div className="products-container">
@@ -56,35 +38,43 @@ export default function Products() {
         <p>No products found.</p>
       ) : (
         <div className="products-grid">
-          {products.map((item) => (
-            <div className="product-card" key={item._id}>
-              
-              {/* IMAGE FIXED */}
-              <img
-                src={getImageUrl(item.images?.[0])}
-                alt={item.name}
-                style={{
-                  width: "100%",
-                  height: "200px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                }}
-                onError={(e) => {
-                  e.target.src =
-                    "https://dummyimage.com/300x200/cccccc/000000&text=Image+Not+Found";
-                }}
-              />
+          {products.map((item) => {
+            const image = item.images?.[0];
 
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
+            return (
+              <div className="product-card" key={item._id}>
+                
+                {/* IMAGE (CLOUDINARY READY) */}
+                <img
+                  src={
+                    image
+                      ? image
+                      : "https://dummyimage.com/300x200/cccccc/000000&text=No+Image"
+                  }
+                  alt={item.name}
+                  style={{
+                    width: "100%",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                  }}
+                  onError={(e) => {
+                    e.target.src =
+                      "https://dummyimage.com/300x200/cccccc/000000&text=Image+Not+Found";
+                  }}
+                />
 
-              <p>
-                <strong>₹ {item.price}</strong>
-              </p>
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
 
-              <button>Add to Cart</button>
-            </div>
-          ))}
+                <p>
+                  <strong>₹ {item.price}</strong>
+                </p>
+
+                <button>Add to Cart</button>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

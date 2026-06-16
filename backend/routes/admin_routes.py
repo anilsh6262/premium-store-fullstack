@@ -4,43 +4,26 @@ from datetime import datetime
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt
 from bson import ObjectId
-
 import cloudinary.uploader
-
 
 admin_bp = Blueprint("admin_bp", __name__)
 
-
 # ----------------------------------
-# ADMIN CHECK DECORATOR (UNCHANGED)
+# ADMIN CHECK (SIMPLE FIXED VERSION)
 # ----------------------------------
-def admin_required(fn):
-    def wrapper(*args, **kwargs):
-        verify = jwt_required()(fn)
-
-        def inner(*args, **kwargs):
-            claims = get_jwt()
-
-            if claims.get("role") != "admin":
-                return jsonify({"message": "Admin only access"}), 403
-
-            return verify(*args, **kwargs)
-
-        return inner
-
-    return wrapper
+def is_admin():
+    claims = get_jwt()
+    return claims.get("role") == "admin"
 
 
 # ----------------------------------
-# ADD PRODUCT (CLOUDINARY FIXED)
+# ADD PRODUCT (CLOUDINARY)
 # ----------------------------------
 @admin_bp.route("/product", methods=["POST"])
 @jwt_required()
 def add_product():
 
-    claims = get_jwt()
-
-    if claims.get("role") != "admin":
+    if not is_admin():
         return jsonify({"message": "Admin only access"}), 403
 
     db = current_app.db
@@ -58,15 +41,11 @@ def add_product():
         files = request.files.getlist("images")
 
         for file in files:
-
             if file.filename == "":
                 continue
 
-            # ----------------------------------
-            # UPLOAD TO CLOUDINARY (IMPORTANT)
-            # ----------------------------------
+            # upload to cloudinary
             result = cloudinary.uploader.upload(file)
-
             image_urls.append(result["secure_url"])
 
         product = {
@@ -93,9 +72,7 @@ def add_product():
         }), 201
 
     except Exception as e:
-        return jsonify({
-            "error": str(e)
-        }), 500
+        return jsonify({"error": str(e)}), 500
 
 
 # ----------------------------------
@@ -105,13 +82,13 @@ def add_product():
 @jwt_required()
 def update_product(product_id):
 
-    if get_jwt().get("role") != "admin":
+    if not is_admin():
         return jsonify({"message": "Admin only access"}), 403
 
     db = current_app.db
 
     try:
-        data = request.json
+        data = request.json or {}
         update_data = {}
 
         if "name" in data:
@@ -129,9 +106,9 @@ def update_product(product_id):
         )
 
         if result.modified_count == 0:
-            return jsonify({"message": "No changes made"})
+            return jsonify({"message": "No changes made"}), 200
 
-        return jsonify({"message": "Product updated"})
+        return jsonify({"message": "Product updated"}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -144,7 +121,7 @@ def update_product(product_id):
 @jwt_required()
 def delete_product(product_id):
 
-    if get_jwt().get("role") != "admin":
+    if not is_admin():
         return jsonify({"message": "Admin only access"}), 403
 
     db = current_app.db
@@ -155,12 +132,11 @@ def delete_product(product_id):
         if not product:
             return jsonify({"message": "Product not found"}), 404
 
-        # OPTIONAL: Cloudinary delete can be added later
-        # (not required for basic setup)
+        # NOTE: Cloudinary delete can be added later if needed
 
         db.products.delete_one({"_id": ObjectId(product_id)})
 
-        return jsonify({"message": "Product deleted"})
+        return jsonify({"message": "Product deleted"}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -173,7 +149,7 @@ def delete_product(product_id):
 @jwt_required()
 def admin_products():
 
-    if get_jwt().get("role") != "admin":
+    if not is_admin():
         return jsonify({"message": "Admin only access"}), 403
 
     db = current_app.db
